@@ -8,6 +8,7 @@ crash.log
 override.tf
 override.tf.json
 .terraform.lock.hcl
+!env/uat/terraform.tfvars
 
 # Editors
 .vscode/
