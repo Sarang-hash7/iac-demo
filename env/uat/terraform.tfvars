@@ -24,21 +24,21 @@ vm_config = {
 
 nsg_rules = [
   {
-    name                   = "allow-http"
-    priority               = 100
-    direction              = "Inbound"
-    access                 = "Allow"
-    protocol               = "Tcp"
-    source_prefixes        = ["*"]
+    name                    = "allow-http"
+    priority                = 100
+    direction               = "Inbound"
+    access                  = "Allow"
+    protocol                = "Tcp"
+    source_prefixes         = ["*"]
     destination_port_ranges = ["80"] # ← list with a single string
   },
   {
-    name                   = "allow-https"
-    priority               = 110
-    direction              = "Inbound"
-    access                 = "Allow"
-    protocol               = "Tcp"
-    source_prefixes        = ["*"]
+    name                    = "allow-https"
+    priority                = 110
+    direction               = "Inbound"
+    access                  = "Allow"
+    protocol                = "Tcp"
+    source_prefixes         = ["*"]
     destination_port_ranges = ["443"] # ← list with a single string
   }
 ]
