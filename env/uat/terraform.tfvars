@@ -2,10 +2,9 @@
 # Overrides (only when needed)
 # ========================
 
-# Example: override VM sizes if needed
 vm_config = {
   app = {
-    vm_size         = "Standard_B1ls" # override default B1ls
+    vm_size         = "Standard_B2s"
     os_disk_size_gb = 30
     os_disk_type    = "StandardSSD_LRS"
     subnet          = "app"
@@ -14,7 +13,7 @@ vm_config = {
   }
 
   db = {
-    vm_size         = "Standard_B1s" # override default B1s
+    vm_size         = "Standard_B2s"
     os_disk_size_gb = 30
     os_disk_type    = "StandardSSD_LRS"
     subnet          = "db"
@@ -23,29 +22,27 @@ vm_config = {
   }
 }
 
-# Example: add NSG rules (since default = [])
 nsg_rules = [
   {
-    name                    = "allow-http"
-    priority                = 100
-    direction               = "Inbound"
-    access                  = "Allow"
-    protocol                = "Tcp"
-    source_prefixes         = ["*"]
-    destination_port_ranges = ["80"]
+    name                   = "allow-http"
+    priority               = 100
+    direction              = "Inbound"
+    access                 = "Allow"
+    protocol               = "Tcp"
+    source_prefixes        = ["*"]
+    destination_port_range = "80"       # ← singular string, not a list
   },
   {
-    name                    = "allow-https"
-    priority                = 110
-    direction               = "Inbound"
-    access                  = "Allow"
-    protocol                = "Tcp"
-    source_prefixes         = ["*"]
-    destination_port_ranges = ["443"]
+    name                   = "allow-https"
+    priority               = 110
+    direction              = "Inbound"
+    access                 = "Allow"
+    protocol               = "Tcp"
+    source_prefixes        = ["*"]
+    destination_port_range = "443"      # ← singular string, not a list
   }
 ]
 
-# Example: override tags if needed
 common_tags = {
   project     = "webapp"
   environment = "uat"
