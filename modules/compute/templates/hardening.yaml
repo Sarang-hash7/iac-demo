@@ -1,0 +1,15 @@
+#cloud-config
+users:
+  - name: azureuser
+    ssh-authorized-keys:
+      - ${ssh_public_key}
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+ssh_pwauth: false
+packages:
+  - unattended-upgrades
+runcmd:
+  - |-
+    for p in ${allowed_ports}; do
+      ufw allow ${p}/tcp || true
+    done
+  - ufw --force enable

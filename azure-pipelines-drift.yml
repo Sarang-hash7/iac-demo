@@ -1,0 +1,71 @@
+trigger: none
+
+schedules:
+  - cron: "0 2 * * *"   # Daily at 2 AM UTC
+    displayName: Nightly Drift Detection
+    branches:
+      include:
+        - main
+    always: true
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  TF_VERSION: "1.6.6"
+  WORKING_DIR: "env/uat"
+
+stages:
+  - stage: DriftDetection
+    displayName: "Terraform Drift Detection"
+    jobs:
+      - job: DriftCheck
+        displayName: "Detect Infrastructure Drift"
+        steps:
+
+          - checkout: self
+
+          # Install Terraform
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: $(TF_VERSION)
+
+          # Azure Login via Service Connection
+          - task: AzureCLI@2
+            displayName: "Azure Login Context"
+            inputs:
+              azureSubscription: "YOUR-SERVICE-CONNECTION-NAME"
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                echo "Logged into Azure"
+                az account show
+
+          # Terraform Drift Detection (REAL LOGIC)
+          - script: |
+              set -e
+
+              cd $(WORKING_DIR)
+
+              echo "Initializing Terraform..."
+              terraform init
+
+              echo "Running drift detection..."
+              terraform plan -detailed-exitcode -var-file=terraform.tfvars
+              exitcode=$?
+
+              echo "Terraform exit code: $exitcode"
+
+              if [ $exitcode -eq 0 ]; then
+                echo "✅ No drift detected"
+              elif [ $exitcode -eq 2 ]; then
+                echo "⚠️ Drift detected! Infrastructure has changed outside Terraform."
+                
+                # Optional: Fail pipeline if drift detected
+                exit 2
+              else
+                echo "❌ Terraform plan failed"
+                exit 1
+              fi
+
+            displayName: "Run Drift Detection"
