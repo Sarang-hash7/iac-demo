@@ -29,6 +29,7 @@ resource "azurerm_network_security_rule" "this" {
   protocol                    = each.value.rule.protocol
   resource_group_name         = var.resource_group
   network_security_group_name = azurerm_network_security_group.this[each.value.subnet].name
+  source_port_range           = "*"
   source_address_prefix = (
     length(each.value.rule.source_prefixes) == 1 &&
     each.value.rule.source_prefixes[0] == "*"
