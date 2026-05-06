@@ -10,13 +10,13 @@ variable "tags" {
 
 variable "nsg_rules" {
   type = list(object({
-    name                   = string
-    priority               = number
-    direction              = string
-    access                 = string
-    protocol               = string
-    source_prefixes        = list(string)
-    destination_port_range = optional(string)        # ← single port
+    name                    = string
+    priority                = number
+    direction               = string
+    access                  = string
+    protocol                = string
+    source_prefixes         = list(string)
+    destination_port_range  = optional(string)       # ← single port
     destination_port_ranges = optional(list(string)) # ← multiple ports
   }))
   default = [
@@ -27,7 +27,7 @@ variable "nsg_rules" {
       access                 = "Allow"
       protocol               = "Tcp"
       source_prefixes        = ["Internet"]
-      destination_port_range = "80"                  # ← singular
+      destination_port_range = "80" # ← singular
     },
     {
       name                   = "Allow-HTTPS"
@@ -36,7 +36,7 @@ variable "nsg_rules" {
       access                 = "Allow"
       protocol               = "Tcp"
       source_prefixes        = ["Internet"]
-      destination_port_range = "443"                 # ← singular
+      destination_port_range = "443" # ← singular
     }
   ]
 }

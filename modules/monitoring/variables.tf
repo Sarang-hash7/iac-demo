@@ -4,7 +4,7 @@ variable "resource_group" { type = string }
 
 variable "retention_in_days" {
   type        = number
-  default     = 30          # ← minimum for PerGB2018 (was 7, only valid for Free SKU)
+  default     = 30 # ← minimum for PerGB2018 (was 7, only valid for Free SKU)
   description = "Retention in days. PerGB2018 SKU accepts 30-730 days."
 
   validation {

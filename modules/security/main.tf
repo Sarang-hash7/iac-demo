@@ -22,13 +22,13 @@ resource "azurerm_network_security_rule" "this" {
     }
   }
 
-  name                = each.value.rule.name
-  priority            = each.value.rule.priority
-  direction           = each.value.rule.direction
-  access              = each.value.rule.access
-  protocol            = each.value.rule.protocol
-  source_port_range   = "*"
-  source_address_prefixes = each.value.rule.source_prefixes
+  name                        = each.value.rule.name
+  priority                    = each.value.rule.priority
+  direction                   = each.value.rule.direction
+  access                      = each.value.rule.access
+  protocol                    = each.value.rule.protocol
+  source_port_range           = "*"
+  source_address_prefixes     = each.value.rule.source_prefixes
   resource_group_name         = var.resource_group
   network_security_group_name = azurerm_network_security_group.this[each.value.subnet].name
 

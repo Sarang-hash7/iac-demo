@@ -30,7 +30,7 @@ nsg_rules = [
     access                 = "Allow"
     protocol               = "Tcp"
     source_prefixes        = ["*"]
-    destination_port_range = "80"       # ← singular string, not a list
+    destination_port_range = "80" # ← singular string, not a list
   },
   {
     name                   = "allow-https"
@@ -39,7 +39,7 @@ nsg_rules = [
     access                 = "Allow"
     protocol               = "Tcp"
     source_prefixes        = ["*"]
-    destination_port_range = "443"      # ← singular string, not a list
+    destination_port_range = "443" # ← singular string, not a list
   }
 ]
 
