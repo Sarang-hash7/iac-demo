@@ -19,7 +19,7 @@ stages:
   jobs:
     - job: Validate
       pool:
-        vmImage: ubuntu-latest
+        vmImage: iac-self-hosted
 
       steps:
         - checkout: self
@@ -47,7 +47,7 @@ stages:
   jobs:
     - job: Plan
       pool:
-        vmImage: ubuntu-latest
+        vmImage: iac-self-hosted
 
       steps:
         - checkout: self
@@ -124,7 +124,7 @@ stages:
   jobs:
     - job: Apply
       pool:
-        vmImage: ubuntu-latest
+        vmImage: iac-self-hosted
 
       steps:
         - checkout: self
