@@ -1,7 +1,5 @@
-trigger:
-  branches:
-    include:
-      - main
+trigger: none
+
 
 variables:
   TF_VERSION: '1.6.x'
