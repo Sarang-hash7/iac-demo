@@ -27,10 +27,17 @@ resource "azurerm_network_security_rule" "this" {
   direction                   = each.value.rule.direction
   access                      = each.value.rule.access
   protocol                    = each.value.rule.protocol
-  source_port_range           = "*"
-  source_address_prefixes     = each.value.rule.source_prefixes
   resource_group_name         = var.resource_group
   network_security_group_name = azurerm_network_security_group.this[each.value.subnet].name
+  source_address_prefix = (
+    length(each.value.rule.source_prefixes) == 1 &&
+    each.value.rule.source_prefixes[0] == "*"
+  ) ? "*" : null
+
+  source_address_prefixes = (
+    length(each.value.rule.source_prefixes) == 1 &&
+    each.value.rule.source_prefixes[0] == "*"
+  ) ? null : each.value.rule.source_prefixes
 
   # Use singular or plural depending on what's provided in the rule
   destination_port_range  = each.value.rule.destination_port_range != null ? each.value.rule.destination_port_range : null
