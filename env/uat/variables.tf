@@ -134,3 +134,9 @@ variable "enable_auto_shutdown" {
   type    = bool
   default = true
 }
+
+variable "kv_name" {
+  type        = string
+  description = "Override Key Vault name to avoid soft-delete conflicts"
+  default     = null
+}

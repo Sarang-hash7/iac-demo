@@ -11,7 +11,7 @@ locals {
   names = {
     rg   = "rg-${local.name_prefix}-${local.index}"
     vnet = "vnet-${local.name_prefix}"
-    kv   = "kv-${local.name_prefix}-${local.index}"
+    kv   = var.kv_name != null ? var.kv_name : "kv-${local.name_prefix}-${local.index}"
     law  = "log-${local.name_prefix}"
     auto = "auto-${local.name_prefix}"
   }
