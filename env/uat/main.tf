@@ -1,11 +1,11 @@
 locals {
-ssh_public_key = trimspace(var.ssh_public_key)
+  ssh_public_key = trimspace(var.ssh_public_key)
 
   # 🔴 Canonical naming (aligned with LLD)
-  env      = var.environment
-  index    = "01"
+  env   = var.environment
+  index = "01"
 
-  name_prefix = "${local.env}"
+  name_prefix = local.env
 
   # ✅ Central naming map
   names = {

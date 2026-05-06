@@ -12,7 +12,7 @@ resource "azurerm_log_analytics_workspace" "this" {
 resource "azurerm_monitor_diagnostic_setting" "vm_metrics" {
   for_each = var.vm_resource_ids
 
-  name                       = "diag-${each.key}-${substr(var.workspace_name,0,12)}"
+  name                       = "diag-${each.key}-${substr(var.workspace_name, 0, 12)}"
   target_resource_id         = each.value
   log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
 
