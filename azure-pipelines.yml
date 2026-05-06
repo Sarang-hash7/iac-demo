@@ -19,7 +19,7 @@ stages:
   jobs:
     - job: Validate
       pool:
-        name: 'iac-self-hosted'            # ← your agent pool name
+        name: 'Default'            # ← your agent pool name
         demands:
           - agent.name -equals iac-self-hosted
 
@@ -49,7 +49,7 @@ stages:
   jobs:
     - job: Plan
       pool:
-        name: 'iac-self-hosted'            # ← your agent pool name
+        name: 'Default'            # ← your agent pool name
         demands:
           - agent.name -equals iac-self-hosted
 
@@ -128,7 +128,7 @@ stages:
   jobs:
     - job: Apply
       pool:
-        name: 'iac-self-hosted'            # ← your agent pool name
+        name: 'Default'            # ← your agent pool name
         demands:
           - agent.name -equals iac-self-hosted
 
