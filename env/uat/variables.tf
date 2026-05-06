@@ -118,7 +118,7 @@ variable "vm_config" {
 
 variable "log_analytics_retention_days" {
   type    = number
-  default = 7
+  default = 30
 }
 
 variable "log_analytics_daily_quota_gb" {
