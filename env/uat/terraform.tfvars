@@ -4,7 +4,7 @@
 
 vm_config = {
   app = {
-    vm_size         = "Standard_B2s"
+    vm_size         = "Standard_B2als_v2"
     os_disk_size_gb = 30
     os_disk_type    = "StandardSSD_LRS"
     subnet          = "app"
@@ -13,7 +13,7 @@ vm_config = {
   }
 
   db = {
-    vm_size         = "Standard_B2s"
+    vm_size         = "Standard_B2als_v2"
     os_disk_size_gb = 30
     os_disk_type    = "StandardSSD_LRS"
     subnet          = "db"
