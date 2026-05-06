@@ -19,7 +19,9 @@ stages:
   jobs:
     - job: Validate
       pool:
-        vmImage: iac-self-hosted
+        name: 'iac-self-hosted'            # ← your agent pool name
+        demands:
+          - agent.name -equals iac-self-hosted
 
       steps:
         - checkout: self
@@ -47,7 +49,9 @@ stages:
   jobs:
     - job: Plan
       pool:
-        vmImage: iac-self-hosted
+        name: 'iac-self-hosted'            # ← your agent pool name
+        demands:
+          - agent.name -equals iac-self-hosted
 
       steps:
         - checkout: self
@@ -124,7 +128,9 @@ stages:
   jobs:
     - job: Apply
       pool:
-        vmImage: iac-self-hosted
+        name: 'iac-self-hosted'            # ← your agent pool name
+        demands:
+          - agent.name -equals iac-self-hosted
 
       steps:
         - checkout: self
