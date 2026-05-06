@@ -14,7 +14,9 @@ stages:
   jobs:
   - job: Validate
     pool:
-      name: 'iac-self-hosted'
+      name: 'Default'
+      demands:
+        - agent.name -equals iac-self-hosted
     steps:
     - checkout: self
 
@@ -38,7 +40,9 @@ stages:
   jobs:
   - job: Plan
     pool:
-      name: 'iac-self-hosted'
+      name: 'Default'
+      demands:
+        - agent.name -equals iac-self-hosted
     steps:
     - checkout: self
 
@@ -84,9 +88,9 @@ stages:
   jobs:
   - job: Approval
     pool: server
-    timeoutInMinutes: 1440       # 24 hrs to approve before auto-reject
+    timeoutInMinutes: 1440
     steps:
-    - task: ManualValidation@1   # upgraded from @0 — @0 is also deprecated
+    - task: ManualValidation@1
       displayName: "Approve Deployment"
       inputs:
         instructions: |
@@ -104,7 +108,9 @@ stages:
   jobs:
   - job: Apply
     pool:
-      name: 'iac-self-hosted'
+      name: 'Default'
+      demands:
+        - agent.name -equals iac-self-hosted
     steps:
     - checkout: self
 
@@ -137,7 +143,7 @@ stages:
         provider: azurerm
         command: apply
         workingDirectory: $(WORKING_DIR)
-        commandOptions: '$(TF_PLAN_FILE)'    # just the filename, not full path
+        commandOptions: '$(TF_PLAN_FILE)'
         environmentServiceNameAzureRM: $(AZURE_SERVICE_CONNECTION)
 
     - script: |
