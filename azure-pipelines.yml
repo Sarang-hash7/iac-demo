@@ -5,6 +5,12 @@ variables:
   TF_PLAN_FILE: 'tfplan'
   AZURE_SERVICE_CONNECTION: 'iac-pipeline'
 
+  # Backend config
+  BACKEND_RG: 'rg-tfstate-uat'
+  BACKEND_STORAGE_ACCOUNT: 'iacdemouat86503'
+  BACKEND_CONTAINER: 'tfstate'
+  BACKEND_KEY: 'projects/iacdemo/environments/uat/terraform.tfstate'
+
 # ========================
 # VALIDATE STAGE
 # ========================
@@ -63,6 +69,10 @@ stages:
         command: init
         workingDirectory: $(WORKING_DIR)
         backendServiceArm: $(AZURE_SERVICE_CONNECTION)
+        backendAzureRmResourceGroupName: $(BACKEND_RG)
+        backendAzureRmStorageAccountName: $(BACKEND_STORAGE_ACCOUNT)
+        backendAzureRmContainerName: $(BACKEND_CONTAINER)
+        backendAzureRmKey: $(BACKEND_KEY)
 
     - task: TerraformTaskV4@4
       displayName: "Terraform Plan"
@@ -136,6 +146,10 @@ stages:
         command: init
         workingDirectory: $(WORKING_DIR)
         backendServiceArm: $(AZURE_SERVICE_CONNECTION)
+        backendAzureRmResourceGroupName: $(BACKEND_RG)
+        backendAzureRmStorageAccountName: $(BACKEND_STORAGE_ACCOUNT)
+        backendAzureRmContainerName: $(BACKEND_CONTAINER)
+        backendAzureRmKey: $(BACKEND_KEY)
 
     - task: TerraformTaskV4@4
       displayName: "Terraform Apply"
