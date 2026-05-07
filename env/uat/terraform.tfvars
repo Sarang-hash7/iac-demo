@@ -30,7 +30,7 @@ nsg_rules = [
     access                 = "Allow"
     protocol               = "Tcp"
     source_prefixes        = ["*"]
-    destination_port_range = "80"
+    destination_port_range = ["80"]
   },
   {
     name                   = "allow-https"
@@ -39,7 +39,7 @@ nsg_rules = [
     access                 = "Allow"
     protocol               = "Tcp"
     source_prefixes        = ["*"]
-    destination_port_range = "443"
+    destination_port_range = ["443"]
   },
   {
     name                   = "allow-ssh"
@@ -48,7 +48,7 @@ nsg_rules = [
     access                 = "Allow"
     protocol               = "Tcp"
     source_prefixes        = ["103.241.182.128/32"]
-    destination_port_range = "22"
+    destination_port_range = ["22"]
   }
 ]
 
