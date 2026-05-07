@@ -29,7 +29,11 @@ resource "azurerm_network_security_rule" "this" {
   protocol                    = each.value.rule.protocol
   resource_group_name         = var.resource_group
   network_security_group_name = azurerm_network_security_group.this[each.value.subnet].name
-  source_port_range           = "*"
+
+  # Source port
+  source_port_range = "*"
+
+  # Source address — singular if "*", plural if list
   source_address_prefix = (
     length(each.value.rule.source_prefixes) == 1 &&
     each.value.rule.source_prefixes[0] == "*"
@@ -40,7 +44,10 @@ resource "azurerm_network_security_rule" "this" {
     each.value.rule.source_prefixes[0] == "*"
   ) ? null : each.value.rule.source_prefixes
 
-  # Use singular or plural depending on what's provided in the rule
+  # Destination address — singular wildcard (use var if you need flexibility later)
+  destination_address_prefix = "*" # ← added
+
+  # Destination port — singular or plural depending on rule definition
   destination_port_range  = each.value.rule.destination_port_range != null ? each.value.rule.destination_port_range : null
   destination_port_ranges = each.value.rule.destination_port_ranges != null ? each.value.rule.destination_port_ranges : null
 }
