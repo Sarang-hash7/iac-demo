@@ -3,6 +3,11 @@ trigger:
     include:
       - main
 
+pr:
+  branches:
+    include:
+      - main
+      
 variables:
   WORKING_DIR: 'env/uat'
   TF_PLAN_FILE: 'tfplan'
