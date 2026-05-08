@@ -7,7 +7,7 @@ pr:
   branches:
     include:
       - main
-      
+
 variables:
   WORKING_DIR: 'env/uat'
   TF_PLAN_FILE: 'tfplan'
@@ -103,6 +103,7 @@ stages:
 - stage: Approval
   displayName: "Manual Approval"
   dependsOn: Plan
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
   - job: Approval
     pool: server
@@ -123,6 +124,7 @@ stages:
 - stage: Apply
   displayName: "Terraform Apply"
   dependsOn: Approval
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
   - job: Apply
     pool:
