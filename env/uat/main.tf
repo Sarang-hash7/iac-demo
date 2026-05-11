@@ -83,7 +83,7 @@ module "compute" {
   vm_config      = var.vm_config
   subnet_map     = module.network.subnet_ids
   nsg_map        = module.security.nsg_ids
-  ssh_public_key = trimspace(data.azurerm_key_vault_secret.ssh_public_key.value)
+  ssh_public_key = trimspace(data.azurerm_key_vault_secret.vm_ssh_public_key.value)
   allowed_ports  = var.allowed_ports
 
   # 🔴 FIX: pass structured naming instead of raw prefix
