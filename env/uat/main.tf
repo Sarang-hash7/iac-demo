@@ -1,5 +1,4 @@
 locals {
-  ssh_public_key = trimspace(var.ssh_public_key)
 
   # 🔴 Canonical naming (aligned with LLD)
   env   = var.environment
@@ -52,6 +51,16 @@ module "key_vault" {
 }
 
 # ========================
+# Read SSH key from Key Vault
+# ========================
+data "azurerm_key_vault_secret" "ssh_public_key" {
+  name         = "ssh-public-key"
+  key_vault_id = module.key_vault.key_vault_id
+
+  depends_on = [module.key_vault]
+}
+
+# ========================
 # Security (NSG)
 # ========================
 module "security" {
@@ -74,7 +83,7 @@ module "compute" {
   vm_config      = var.vm_config
   subnet_map     = module.network.subnet_ids
   nsg_map        = module.security.nsg_ids
-  ssh_public_key = local.ssh_public_key
+  ssh_public_key = trimspace(data.azurerm_key_vault_secret.ssh_public_key.value)
   allowed_ports  = var.allowed_ports
 
   # 🔴 FIX: pass structured naming instead of raw prefix
