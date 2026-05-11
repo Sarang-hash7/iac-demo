@@ -56,6 +56,12 @@ resource "azurerm_linux_virtual_machine" "this" {
     public_key = var.ssh_public_key
   }
 
+  lifecycle {
+    ignore_changes = [
+      admin_ssh_key # prevents VM recreation when ssh key source changes
+    ]
+  }
+
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = each.value.os_disk_type
