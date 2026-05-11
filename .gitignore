@@ -26,7 +26,8 @@ override.tf.json
 id_rsa
 id_rsa.pub
 keys/
-
+.env/keys/
+env/keys/
 # Examples terraform caches
 examples/**/.terraform/
 

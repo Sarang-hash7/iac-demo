@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "bootstrap" {
 # Storage Account (TF State)
 # =========================
 resource "azurerm_storage_account" "tfstate" {
-  name                = "iacdemouat86503" # MUST be globally unique
+  name                = "iacdemouat86503"
   resource_group_name = azurerm_resource_group.bootstrap.name
   location            = azurerm_resource_group.bootstrap.location
 
@@ -22,6 +22,21 @@ resource "azurerm_storage_account" "tfstate" {
   min_tls_version = "TLS1_2"
 
   allow_nested_items_to_be_public = false
+
+  blob_properties {
+
+    versioning_enabled = true
+
+    change_feed_enabled = true
+
+    delete_retention_policy {
+      days = 7
+    }
+
+    container_delete_retention_policy {
+      days = 7
+    }
+  }
 
   tags = {
     environment = var.environment
