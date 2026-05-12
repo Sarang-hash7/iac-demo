@@ -44,20 +44,6 @@ variable "common_tags" {
 }
 
 # ========================
-# SSH Configuration
-# ========================
-
-variable "ssh_public_key" {
-  description = "SSH public key for VM access"
-  type        = string
-
-  validation {
-    condition     = length(var.ssh_public_key) > 0
-    error_message = "SSH public key must be provided."
-  }
-}
-
-# ========================
 # Security
 # ========================
 
