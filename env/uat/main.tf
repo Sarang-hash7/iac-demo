@@ -120,3 +120,23 @@ module "automation" {
   vm_resource_ids         = module.compute.vm_ids
   tags                    = var.common_tags
 }
+
+module "snapshot_backup" {
+  source = "../../modules/snapshot_backup"
+
+  automation_account_name = local.names.auto
+
+  resource_group_name = module.resource_group.resource_group_name
+  location            = var.location
+
+  snapshot_target_vm_name        = "vm-uat-db-01"
+  snapshot_target_resource_group = module.resource_group.resource_group_name
+
+  snapshot_schedule_hour_utc   = 14
+  snapshot_schedule_minute_utc = 30
+
+  snapshot_retention_hours = 48
+
+  snapshot_prefix = "uat-db-snapshot"
+}
+
