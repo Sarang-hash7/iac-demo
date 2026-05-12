@@ -1,5 +1,5 @@
 locals {
-
+  ssh_public_key = trimspace(data.azurerm_key_vault_secret.ssh_public_key.value)
   # 🔴 Canonical naming (aligned with LLD)
   env   = var.environment
   index = "01"
