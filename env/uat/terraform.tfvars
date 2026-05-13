@@ -60,3 +60,5 @@ common_tags = {
 
 kv_name = "kv-uat-56712"
 
+snapshot_start_date = "2026-05-13"
+cleanup_start_date  = "2026-05-13"
