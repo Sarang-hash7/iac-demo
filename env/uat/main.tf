@@ -132,6 +132,8 @@ module "snapshot_backup" {
   snapshot_target_vm_name        = "vm-uat-db-01"
   snapshot_target_resource_group = module.resource_group.resource_group_name
 
+  snapshot_start_date          = var.snapshot_start_date
+  cleanup_start_date           = var.cleanup_start_date
   snapshot_schedule_hour_utc   = 14
   snapshot_schedule_minute_utc = 30
 
