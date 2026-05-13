@@ -1,3 +1,18 @@
+locals {
+  snapshot_start_time = format(
+    "%sT%02d:%02d:00Z",
+    var.snapshot_start_date,
+    var.snapshot_schedule_hour_utc,
+    var.snapshot_schedule_minute_utc
+  )
+
+  cleanup_start_time = format(
+    "%sT%02d:%02d:00Z",
+    var.cleanup_start_date,
+    var.snapshot_schedule_hour_utc + 1,
+    var.snapshot_schedule_minute_utc
+  )
+}
 resource "azurerm_automation_runbook" "snapshot_vm" {
   name                    = "snapshot-vm"
   location                = var.location
@@ -34,12 +49,8 @@ resource "azurerm_automation_schedule" "snapshot" {
   frequency = "Day"
   interval  = 1
 
-  timezone = "UTC"
-  start_time = format(
-    "2026-01-01T%02d:%02d:00Z",
-    var.snapshot_schedule_hour_utc,
-    var.snapshot_schedule_minute_utc
-  )
+  timezone   = "UTC"
+  start_time = local.snapshot_start_time
 
   description = "Daily VM snapshot schedule"
 }
@@ -54,11 +65,7 @@ resource "azurerm_automation_schedule" "cleanup" {
 
   timezone = "UTC"
 
-  start_time = format(
-    "2026-01-01T%02d:%02d:00Z",
-    var.snapshot_schedule_hour_utc + 1,
-    var.snapshot_schedule_minute_utc
-  )
+  start_time = local.cleanup_start_time
 
   description = "Daily snapshot cleanup schedule"
 }

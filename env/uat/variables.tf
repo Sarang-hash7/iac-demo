@@ -126,3 +126,11 @@ variable "kv_name" {
   description = "Override Key Vault name to avoid soft-delete conflicts"
   default     = null
 }
+
+variable "snapshot_start_date" {
+  type = string
+}
+
+variable "cleanup_start_date" {
+  type = string
+}

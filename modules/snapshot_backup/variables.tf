@@ -37,3 +37,11 @@ variable "snapshot_prefix" {
   type    = string
   default = "snapshot"
 }
+
+variable "snapshot_start_date" {
+  type = string
+}
+
+variable "cleanup_start_date" {
+  type = string
+}
