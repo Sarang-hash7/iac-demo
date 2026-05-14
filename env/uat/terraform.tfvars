@@ -25,7 +25,7 @@ vm_config = {
 app_nsg_rules = [
   {
     name                    = "allow-https"
-    priority                = 100
+    priority                = 200
     direction               = "Inbound"
     access                  = "Allow"
     protocol                = "Tcp"
@@ -34,7 +34,7 @@ app_nsg_rules = [
   },
   {
     name                    = "allow-ssh"
-    priority                = 110
+    priority                = 210
     direction               = "Inbound"
     access                  = "Allow"
     protocol                = "Tcp"
@@ -46,7 +46,7 @@ app_nsg_rules = [
 db_nsg_rules = [
   {
     name                    = "allow-postgres-from-app"
-    priority                = 100
+    priority                = 200
     direction               = "Inbound"
     access                  = "Allow"
     protocol                = "Tcp"
@@ -55,7 +55,7 @@ db_nsg_rules = [
   },
   {
     name                    = "allow-ssh-from-admin"
-    priority                = 110
+    priority                = 210
     direction               = "Inbound"
     access                  = "Allow"
     protocol                = "Tcp"
