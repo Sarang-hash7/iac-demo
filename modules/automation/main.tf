@@ -20,3 +20,13 @@ resource "azurerm_role_assignment" "automation_vm_contrib" {
     azurerm_automation_account.this
   ]
 }
+
+resource "azurerm_role_assignment" "automation_rg_contrib" {
+  scope                = var.resource_group_id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_automation_account.this.identity[0].principal_id
+
+  depends_on = [
+    azurerm_automation_account.this
+  ]
+}
