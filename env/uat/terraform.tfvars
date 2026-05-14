@@ -22,28 +22,40 @@ vm_config = {
   }
 }
 
-nsg_rules = [
+app_nsg_rules = [
   {
-    name                    = "allow-http"
+    name                    = "allow-https"
     priority                = 100
     direction               = "Inbound"
     access                  = "Allow"
     protocol                = "Tcp"
-    source_prefixes         = ["*"]
-    destination_port_ranges = ["80"]
-  },
-  {
-    name                    = "allow-https"
-    priority                = 110
-    direction               = "Inbound"
-    access                  = "Allow"
-    protocol                = "Tcp"
-    source_prefixes         = ["*"]
+    source_prefixes         = ["Internet"]
     destination_port_ranges = ["443"]
   },
   {
     name                    = "allow-ssh"
-    priority                = 120
+    priority                = 110
+    direction               = "Inbound"
+    access                  = "Allow"
+    protocol                = "Tcp"
+    source_prefixes         = ["103.241.182.128/32"]
+    destination_port_ranges = ["22"]
+  }
+]
+
+db_nsg_rules = [
+  {
+    name                    = "allow-postgres-from-app"
+    priority                = 100
+    direction               = "Inbound"
+    access                  = "Allow"
+    protocol                = "Tcp"
+    source_prefixes         = ["10.10.1.0/24"]
+    destination_port_ranges = ["5432"]
+  },
+  {
+    name                    = "allow-ssh-from-admin"
+    priority                = 110
     direction               = "Inbound"
     access                  = "Allow"
     protocol                = "Tcp"
