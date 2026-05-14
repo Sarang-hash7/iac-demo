@@ -49,7 +49,7 @@ resource "azurerm_automation_schedule" "snapshot" {
   frequency = "Day"
   interval  = 1
 
-  timezone   = "UTC"
+  timezone   = "Etc/UTC"
   start_time = local.snapshot_start_time
 
   description = "Daily VM snapshot schedule"
@@ -63,7 +63,7 @@ resource "azurerm_automation_schedule" "cleanup" {
   frequency = "Day"
   interval  = 1
 
-  timezone = "UTC"
+  timezone = "Etc/UTC"
 
   start_time = local.cleanup_start_time
 
