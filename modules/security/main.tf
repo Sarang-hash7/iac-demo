@@ -38,12 +38,18 @@ resource "azurerm_network_security_rule" "this" {
   # Source address — singular if "*", plural if list
   source_address_prefix = (
     length(each.value.rule.source_prefixes) == 1 &&
-    each.value.rule.source_prefixes[0] == "*"
-  ) ? "*" : null
+    contains(
+      ["*", "Internet", "VirtualNetwork", "AzureLoadBalancer"],
+      each.value.rule.source_prefixes[0]
+    )
+  ) ? each.value.rule.source_prefixes[0] : null
 
   source_address_prefixes = (
     length(each.value.rule.source_prefixes) == 1 &&
-    each.value.rule.source_prefixes[0] == "*"
+    contains(
+      ["*", "Internet", "VirtualNetwork", "AzureLoadBalancer"],
+      each.value.rule.source_prefixes[0]
+    )
   ) ? null : each.value.rule.source_prefixes
 
   # Destination address — singular wildcard (use var if you need flexibility later)
