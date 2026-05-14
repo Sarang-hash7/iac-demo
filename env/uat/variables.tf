@@ -47,12 +47,11 @@ variable "common_tags" {
 # Security
 # ========================
 
-variable "allowed_ports" {
-  type    = list(number)
-  default = [22, 80, 443]
-}
+# ========================
+# Security
+# ========================
 
-variable "nsg_rules" {
+variable "app_nsg_rules" {
   type = list(object({
     name                    = string
     priority                = number
@@ -60,8 +59,25 @@ variable "nsg_rules" {
     access                  = string
     protocol                = string
     source_prefixes         = list(string)
-    destination_port_ranges = list(string)
+    destination_port_range  = optional(string)
+    destination_port_ranges = optional(list(string))
   }))
+
+  default = []
+}
+
+variable "db_nsg_rules" {
+  type = list(object({
+    name                    = string
+    priority                = number
+    direction               = string
+    access                  = string
+    protocol                = string
+    source_prefixes         = list(string)
+    destination_port_range  = optional(string)
+    destination_port_ranges = optional(list(string))
+  }))
+
   default = []
 }
 

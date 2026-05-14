@@ -14,13 +14,15 @@ resource "azurerm_network_security_group" "this" {
 # NSG Rules (applied to each NSG)
 # ========================
 resource "azurerm_network_security_rule" "this" {
-  for_each = {
-    for pair in setproduct(keys(var.subnet_map), var.nsg_rules) :
-    "${pair[0]}-${pair[1].name}" => {
-      subnet = pair[0]
-      rule   = pair[1]
+  for_each = merge([
+    for subnet_name, rules in var.nsg_rules : {
+      for rule in rules :
+      "${subnet_name}-${rule.name}" => {
+        subnet = subnet_name
+        rule   = rule
+      }
     }
-  }
+  ]...)
 
   name                        = each.value.rule.name
   priority                    = each.value.rule.priority

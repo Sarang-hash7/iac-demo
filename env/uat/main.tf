@@ -67,10 +67,15 @@ module "security" {
   source         = "../../modules/security"
   resource_group = module.resource_group.resource_group_name
   subnet_map     = module.network.subnet_ids
-  nsg_rules      = var.nsg_rules
-  location       = var.location
-  tags           = var.common_tags
-  environment    = local.env
+
+  nsg_rules = {
+    app = var.app_nsg_rules
+    db  = var.db_nsg_rules
+  }
+
+  location    = var.location
+  tags        = var.common_tags
+  environment = local.env
 }
 
 # ========================
@@ -84,7 +89,6 @@ module "compute" {
   subnet_map     = module.network.subnet_ids
   nsg_map        = module.security.nsg_ids
   ssh_public_key = trimspace(data.azurerm_key_vault_secret.ssh_public_key.value)
-  allowed_ports  = var.allowed_ports
 
   # 🔴 FIX: pass structured naming instead of raw prefix
   environment    = local.env
