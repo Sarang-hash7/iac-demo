@@ -24,7 +24,7 @@ resource "azurerm_automation_runbook" "snapshot_vm" {
 
   runbook_type = "PowerShell"
 
-  content = file("${path.module}/runbooks/snapshot-vm.ps1")
+  content = trimspace(replace(file("${path.module}/runbooks/snapshot-vm.ps1"), "\r\n", "\n"))
 }
 
 resource "azurerm_automation_runbook" "cleanup_snapshots" {
@@ -38,7 +38,7 @@ resource "azurerm_automation_runbook" "cleanup_snapshots" {
 
   runbook_type = "PowerShell"
 
-  content = file("${path.module}/runbooks/cleanup-snapshots.ps1")
+  content = trimspace(replace(file("${path.module}/runbooks/cleanup-snapshots.ps1"), "\r\n", "\n"))
 }
 
 resource "azurerm_automation_schedule" "snapshot" {
