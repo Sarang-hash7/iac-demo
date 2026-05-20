@@ -82,6 +82,7 @@ stages:
         backendAzureRmStorageAccountName: $(BACKEND_STORAGE_ACCOUNT)
         backendAzureRmContainerName: $(BACKEND_CONTAINER)
         backendAzureRmKey: $(BACKEND_KEY)
+        backendAzureRmAccessKey: $(TF_BACKEND_ACCESS_KEY)
 
     - task: TerraformTaskV4@4
       displayName: "Terraform Plan"
@@ -161,6 +162,7 @@ stages:
         backendAzureRmStorageAccountName: $(BACKEND_STORAGE_ACCOUNT)
         backendAzureRmContainerName: $(BACKEND_CONTAINER)
         backendAzureRmKey: $(BACKEND_KEY)
+        backendAzureRmAccessKey: $(TF_BACKEND_ACCESS_KEY)
 
     - task: TerraformTaskV4@4
       displayName: "Terraform Apply"
