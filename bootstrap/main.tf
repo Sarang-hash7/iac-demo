@@ -30,7 +30,8 @@ resource "azurerm_storage_account" "tfstate" {
 
     ip_rules = [
       "103.241.182.128",
-      "20.244.30.191"
+      "20.244.30.191",
+      "20.209.56.97"
     ]
 
     bypass = [
