@@ -43,11 +43,12 @@ module "network" {
 # Key Vault
 # ========================
 module "key_vault" {
-  source         = "../../modules/key_vault"
-  name           = local.names.kv
-  location       = var.location
-  resource_group = module.resource_group.resource_group_name
-  tags           = var.common_tags
+  source                     = "../../modules/key_vault"
+  name                       = local.names.kv
+  location                   = var.location
+  resource_group             = module.resource_group.resource_group_name
+  log_analytics_workspace_id = module.monitoring.workspace_id
+  tags                       = var.common_tags
 }
 
 # ========================

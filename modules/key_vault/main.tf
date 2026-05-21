@@ -9,3 +9,18 @@ resource "azurerm_key_vault" "this" {
   purge_protection_enabled = false
   tags                     = var.tags
 }
+
+resource "azurerm_monitor_diagnostic_setting" "key_vault" {
+  name                       = "${var.name}-diagnostics"
+  target_resource_id         = azurerm_key_vault.this.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+
+  enabled_log {
+    category = "AuditEvent"
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+  }
+}
