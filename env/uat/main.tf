@@ -48,6 +48,8 @@ module "key_vault" {
   location                   = var.location
   resource_group             = module.resource_group.resource_group_name
   log_analytics_workspace_id = module.monitoring.workspace_id
+  admin_object_id            = "5f4180f8-0b91-46d0-a76b-9dceef1de46f"
+  pipeline_sp_object_id      = "cd648a5e-4c69-4d62-97e5-279b108c88e6"
   tags                       = var.common_tags
 }
 
