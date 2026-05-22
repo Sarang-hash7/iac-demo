@@ -25,25 +25,8 @@ resource "azurerm_monitor_diagnostic_setting" "key_vault" {
   }
 }
 
-resource "azurerm_key_vault_access_policy" "admin" {
-  key_vault_id = azurerm_key_vault.this.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = var.admin_object_id
-
-  secret_permissions = [
-    "Get",
-    "Set",
-    "List"
-  ]
-}
-
-resource "azurerm_key_vault_access_policy" "pipeline" {
-  key_vault_id = azurerm_key_vault.this.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = var.pipeline_sp_object_id
-
-  secret_permissions = [
-    "Get",
-    "List"
-  ]
+resource "azurerm_role_assignment" "pipeline_kv_secrets_user" {
+  scope                = azurerm_key_vault.this.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = var.pipeline_sp_object_id
 }
