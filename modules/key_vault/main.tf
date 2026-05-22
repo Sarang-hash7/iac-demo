@@ -1,13 +1,14 @@
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "this" {
-  name                     = var.name
-  location                 = var.location
-  resource_group_name      = var.resource_group
-  tenant_id                = data.azurerm_client_config.current.tenant_id
-  sku_name                 = "standard"
-  purge_protection_enabled = false
-  tags                     = var.tags
+  name                      = var.name
+  location                  = var.location
+  resource_group_name       = var.resource_group
+  tenant_id                 = data.azurerm_client_config.current.tenant_id
+  sku_name                  = "standard"
+  purge_protection_enabled  = false
+  enable_rbac_authorization = true
+  tags                      = var.tags
 }
 
 resource "azurerm_monitor_diagnostic_setting" "key_vault" {
