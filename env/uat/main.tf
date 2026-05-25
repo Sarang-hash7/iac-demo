@@ -30,13 +30,14 @@ module "resource_group" {
 # Network
 # ========================
 module "network" {
-  source         = "../../modules/network"
-  vnet_name      = local.names.vnet
-  address_space  = var.vnet_cidr
-  subnets        = var.subnets
-  resource_group = module.resource_group.resource_group_name
-  location       = var.location
-  tags           = var.common_tags
+  source                  = "../../modules/network"
+  vnet_name               = local.names.vnet
+  address_space           = var.vnet_cidr
+  subnets                 = var.subnets
+  resource_group          = module.resource_group.resource_group_name
+  location                = var.location
+  private_endpoint_subnet = var.network_private_endpoint_subnet
+  tags                    = var.common_tags
 }
 
 # ========================
