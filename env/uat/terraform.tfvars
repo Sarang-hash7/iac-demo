@@ -64,6 +64,12 @@ db_nsg_rules = [
   }
 ]
 
+network_private_endpoint_subnet = {
+  name                              = "snet-private-endpoints"
+  address_prefix                    = "10.10.4.0/24"
+  private_endpoint_network_policies = "Disabled"
+}
+
 common_tags = {
   project     = "webapp"
   environment = "uat"

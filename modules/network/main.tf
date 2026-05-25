@@ -38,3 +38,11 @@ resource "azurerm_subnet" "this" {
     }
   }
 }
+
+resource "azurerm_subnet" "private_endpoints" {
+  name                              = var.private_endpoint_subnet.name
+  resource_group_name               = var.resource_group
+  virtual_network_name              = azurerm_virtual_network.this.name
+  address_prefixes                  = [var.private_endpoint_subnet.address_prefix]
+  private_endpoint_network_policies = var.private_endpoint_subnet.private_endpoint_network_policies
+}
