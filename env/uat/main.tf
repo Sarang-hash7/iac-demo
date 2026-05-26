@@ -57,6 +57,25 @@ module "vnet_peering" {
   vnet_b_id             = data.azurerm_virtual_network.agent_vnet.id
 }
 
+module "private_dns" {
+  source = "../../modules/private_dns"
+
+  dns_zone_name       = "privatelink.vaultcore.azure.net"
+  resource_group_name = module.resource_group.resource_group_name
+
+  vnet_links = {
+    uat = {
+      name    = "uat-vnet-link"
+      vnet_id = module.network.vnet_id
+    }
+
+    agent = {
+      name    = "agent-vnet-link"
+      vnet_id = data.azurerm_virtual_network.agent_vnet.id
+    }
+  }
+}
+
 # ========================
 # Key Vault
 # ========================
