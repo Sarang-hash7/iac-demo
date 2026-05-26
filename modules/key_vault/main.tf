@@ -8,7 +8,16 @@ resource "azurerm_key_vault" "this" {
   sku_name                  = "standard"
   purge_protection_enabled  = false
   enable_rbac_authorization = true
-  tags                      = var.tags
+  dynamic "network_acls" {
+    for_each = var.network_acls != null ? [var.network_acls] : []
+
+    content {
+      default_action = network_acls.value.default_action
+      bypass         = network_acls.value.bypass
+      ip_rules       = network_acls.value.ip_rules
+    }
+  }
+  tags = var.tags
 }
 
 resource "azurerm_monitor_diagnostic_setting" "key_vault" {
