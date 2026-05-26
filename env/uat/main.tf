@@ -76,6 +76,24 @@ module "private_dns" {
   }
 }
 
+module "key_vault_private_endpoint" {
+  source = "../../modules/private_endpoint"
+
+  name                = "pe-kv-uat"
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  subnet_id = module.network.private_endpoint_subnet_id
+
+  private_connection_resource_id = module.key_vault.key_vault_id
+
+  subresource_names = ["vault"]
+
+  private_dns_zone_ids = [
+    module.private_dns.dns_zone_id
+  ]
+}
+
 # ========================
 # Key Vault
 # ========================
