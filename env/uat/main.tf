@@ -16,6 +16,11 @@ locals {
   }
 }
 
+data "azurerm_virtual_network" "agent_vnet" {
+  name                = "iac-self-hosted-vnet"
+  resource_group_name = "iac-self-hosted_group"
+}
+
 # ========================
 # Resource Group
 # ========================
@@ -38,6 +43,18 @@ module "network" {
   location                = var.location
   private_endpoint_subnet = var.network_private_endpoint_subnet
   tags                    = var.common_tags
+}
+
+module "vnet_peering" {
+  source = "../../modules/vnet_peering"
+
+  vnet_a_name           = module.network.vnet_name
+  vnet_a_resource_group = module.resource_group.resource_group_name
+  vnet_a_id             = module.network.vnet_id
+
+  vnet_b_name           = data.azurerm_virtual_network.agent_vnet.name
+  vnet_b_resource_group = data.azurerm_virtual_network.agent_vnet.resource_group_name
+  vnet_b_id             = data.azurerm_virtual_network.agent_vnet.id
 }
 
 # ========================
