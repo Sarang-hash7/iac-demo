@@ -11,6 +11,17 @@ variable "admin_object_id" {
 variable "pipeline_sp_object_id" {
   type = string
 }
+
+variable "network_acls" {
+  type = object({
+    default_action = string
+    bypass         = string
+    ip_rules       = list(string)
+  })
+
+  default = null
+}
+
 variable "tags" {
   type    = map(string)
   default = {}

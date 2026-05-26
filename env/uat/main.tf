@@ -98,10 +98,20 @@ module "key_vault_private_endpoint" {
 # Key Vault
 # ========================
 module "key_vault" {
-  source                     = "../../modules/key_vault"
-  name                       = local.names.kv
-  location                   = var.location
-  resource_group             = module.resource_group.resource_group_name
+  source         = "../../modules/key_vault"
+  name           = local.names.kv
+  location       = var.location
+  resource_group = module.resource_group.resource_group_name
+
+  network_acls = {
+    default_action = "Deny"
+    bypass         = "AzureServices"
+
+    ip_rules = [
+      "103.241.182.128/32"
+    ]
+  }
+
   log_analytics_workspace_id = module.monitoring.workspace_id
   admin_object_id            = "5f4180f8-0b91-46d0-a76b-9dceef1de46f"
   pipeline_sp_object_id      = "cd648a5e-4c69-4d62-97e5-279b108c88e6"
