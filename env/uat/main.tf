@@ -105,7 +105,7 @@ module "key_vault" {
 
   network_acls = {
     default_action = "Deny"
-    bypass         = "AzureServices"
+    bypass         = "None"
 
     ip_rules = [
       "103.241.182.128/32"
