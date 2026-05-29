@@ -214,3 +214,19 @@ module "snapshot_backup" {
   snapshot_prefix = "uat-db-snapshot"
 }
 
+# ========================
+# Observability
+# ========================
+
+module "observability" {
+  source = "../../modules/observability"
+
+  resource_group_name        = module.resource_group.resource_group_name
+  location                   = var.location
+  log_analytics_workspace_id = module.monitoring.workspace_id
+
+  vms = module.compute.vm_metadata
+
+  environment = local.env
+  tags        = var.common_tags
+}

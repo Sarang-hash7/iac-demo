@@ -2,6 +2,16 @@ output "vm_ids" {
   value = { for k, v in azurerm_linux_virtual_machine.this : k => v.id }
 }
 
+output "vm_metadata" {
+  value = {
+    for k, v in azurerm_linux_virtual_machine.this :
+    k => {
+      id      = v.id
+      os_type = "linux"
+    }
+  }
+}
+
 output "app_public_ip" {
   value = try(azurerm_public_ip.this["app"].ip_address, "")
 }
