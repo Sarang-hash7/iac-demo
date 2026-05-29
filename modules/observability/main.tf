@@ -53,6 +53,15 @@ resource "azurerm_monitor_data_collection_rule" "linux_baseline" {
         "\\Processor\\UtilizationPercentage"
       ]
     }
+    extension {
+      streams = [
+        "Microsoft-Heartbeat"
+      ]
+
+      extension_name = "Heartbeat"
+      extension_json = jsonencode({})
+      name           = "heartbeat-extension"
+    }
   }
 
   tags = var.tags
