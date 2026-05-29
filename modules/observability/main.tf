@@ -30,14 +30,20 @@ resource "azurerm_monitor_data_collection_rule" "linux_baseline" {
   }
 
   data_flow {
-    streams      = ["Microsoft-InsightsMetrics"]
+    streams = [
+      "Microsoft-Heartbeat",
+      "Microsoft-InsightsMetrics"
+    ]
+
     destinations = ["law-destination"]
   }
 
   data_sources {
     performance_counter {
-      name                          = "linux-perf-counters"
-      streams                       = ["Microsoft-InsightsMetrics"]
+      name = "linux-perf-counters"
+      streams = [
+        "Microsoft-InsightsMetrics"
+      ]
       sampling_frequency_in_seconds = 60
 
       counter_specifiers = [
