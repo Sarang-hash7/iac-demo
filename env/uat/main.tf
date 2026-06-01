@@ -230,3 +230,22 @@ module "observability" {
   environment = local.env
   tags        = var.common_tags
 }
+
+# ========================
+# Alerting
+# ========================
+
+module "alerting" {
+  source = "../../modules/alerting"
+
+  resource_group_name = module.resource_group.resource_group_name
+  location            = var.location
+  environment         = local.env
+  tags                = var.common_tags
+
+  action_group_email = var.alert_action_group_email
+
+  log_analytics_workspace_id = module.monitoring.workspace_id
+  key_vault_id               = module.key_vault.key_vault_id
+  vm_alert_targets           = module.compute.vm_metadata
+}
