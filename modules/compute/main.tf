@@ -51,6 +51,10 @@ resource "azurerm_linux_virtual_machine" "this" {
   network_interface_ids = [azurerm_network_interface.this[each.key].id]
   tags                  = var.tags
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   admin_ssh_key {
     username   = each.value.admin_username
     public_key = var.ssh_public_key
