@@ -98,7 +98,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "vm_memory" {
       | where _ResourceId =~ "${each.value.id}"
       | where ObjectName == "Memory"
       | where CounterName in~ ("% Used Memory", "Used Memory %")
-      | summarize AggregatedValue = avg(CounterValue)
+      | summarize AggregatedValue = avg(CounterValue) by bin(TimeGenerated, 5m)
     KQL
 
     time_aggregation_method = "Maximum"
@@ -141,8 +141,8 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "vm_disk" {
       | where CounterName == "% Used Space"
       | where InstanceName !in (${local.disk_excluded_mounts_kql})
       ${local.disk_excluded_mount_prefix_filters}
-      | summarize MaxUsed = max(CounterValue) by InstanceName
-      | summarize AggregatedValue = max(MaxUsed)
+      | summarize MaxUsed = max(CounterValue) by bin(TimeGenerated, 5m), InstanceName
+      | summarize AggregatedValue = max(MaxUsed) by TimeGenerated
     KQL
 
     time_aggregation_method = "Maximum"
@@ -184,7 +184,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "vm_heartbeat_missing"
         | where _ResourceId =~ "${each.value.id}"
         | summarize max(TimeGenerated)
       );
-      print AggregatedValue = iff(isnull(lastSeen) or lastSeen < ago(10m), 1, 0)
+      print TimeGenerated = now(), AggregatedValue = iff(isnull(lastSeen) or lastSeen < ago(10m), 1, 0)
     KQL
 
     time_aggregation_method = "Maximum"
