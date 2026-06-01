@@ -14,19 +14,20 @@ resource "azurerm_virtual_machine_extension" "ama" {
     : "AzureMonitorLinuxAgent"
   )
 
-  type_handler_version       = "1.29" # ← updated from 1.0
+  type_handler_version       = "1.29"
   auto_upgrade_minor_version = true
 
   tags = var.tags
 }
 
 # ========================
-# Data Collection Rule — Linux Baseline
+# Data Collection Rule - Linux Baseline
 # ========================
 resource "azurerm_monitor_data_collection_rule" "linux_baseline" {
   name                = "dcr-${var.environment}-linux-baseline"
   location            = var.location
   resource_group_name = var.resource_group_name
+  kind                = "Linux"
 
   destinations {
     log_analytics {
@@ -35,35 +36,26 @@ resource "azurerm_monitor_data_collection_rule" "linux_baseline" {
     }
   }
 
-  # ── Heartbeat flow ──────────────────────────────────────────
   data_flow {
-    streams      = ["Microsoft-Heartbeat"]
-    destinations = ["law-destination"]
-  }
-
-  # ── Performance metrics flow ─────────────────────────────────
-  data_flow {
-    streams      = ["Microsoft-InsightsMetrics"]
-    destinations = ["law-destination"]
+    streams       = ["Microsoft-Perf"]
+    destinations  = ["law-destination"]
+    output_stream = "Microsoft-Perf"
   }
 
   data_sources {
     performance_counter {
       name                          = "linux-perf-counters"
-      streams                       = ["Microsoft-InsightsMetrics"]
+      streams                       = ["Microsoft-Perf"]
       sampling_frequency_in_seconds = 60
 
-      # ✅ Correct Linux counter format
       counter_specifiers = [
-        "Memory(*) % Used Memory",
-        "Memory(*) Available MBytes Memory",
-        "Logical Disk(*) % Used Space",
-        "Logical Disk(*) % Free Space",
-        "Processor(*) % Processor Time"
+        "Memory(*)\\% Used Memory",
+        "Memory(*)\\Available MBytes Memory",
+        "Logical Disk(*)\\% Used Space",
+        "Logical Disk(*)\\% Free Space",
+        "Processor(*)\\% Processor Time"
       ]
     }
-    # ← Removed incorrect extension/Heartbeat block
-    # Heartbeat is automatic when Microsoft-Heartbeat is in data_flow
   }
 
   tags = var.tags
@@ -80,6 +72,6 @@ resource "azurerm_monitor_data_collection_rule_association" "vm_assoc" {
   data_collection_rule_id = azurerm_monitor_data_collection_rule.linux_baseline.id
 
   depends_on = [
-    azurerm_virtual_machine_extension.ama # ← ensure AMA is installed before association
+    azurerm_virtual_machine_extension.ama
   ]
 }
