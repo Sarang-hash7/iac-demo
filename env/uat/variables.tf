@@ -158,3 +158,8 @@ variable "snapshot_start_date" {
 variable "cleanup_start_date" {
   type = string
 }
+
+variable "alert_action_group_email" {
+  type    = string
+  default = "sarang.gupta@cloud4c.com"
+}

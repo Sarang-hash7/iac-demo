@@ -7,6 +7,7 @@ output "vm_metadata" {
     for k, v in azurerm_linux_virtual_machine.this :
     k => {
       id      = v.id
+      name    = v.name
       os_type = "linux"
     }
   }
