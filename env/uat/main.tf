@@ -118,7 +118,7 @@ module "key_vault" {
   tags                       = var.common_tags
 }
 
-# ========================
+# =======================
 # Read SSH key from Key Vault
 # ========================
 data "azurerm_key_vault_secret" "ssh_public_key" {
