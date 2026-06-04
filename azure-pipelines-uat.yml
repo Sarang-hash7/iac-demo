@@ -3,11 +3,22 @@ trigger:
     include:
       - main
 
+  paths:
+    include:
+      - env/uat/**
+      - modules/**
+
 pr:
   autoCancel: true
+
   branches:
     include:
       - main
+
+  paths:
+    include:
+      - env/uat/**
+      - modules/**
 
 variables:
   WORKING_DIR: 'env/uat'
