@@ -10,6 +10,11 @@ variable "subnets" {
   type = map(string)
 }
 
+variable "subnet_name_overrides" {
+  type    = map(string)
+  default = {}
+}
+
 variable "resource_group" {
   type = string
 }

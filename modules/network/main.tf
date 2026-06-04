@@ -16,7 +16,11 @@ resource "azurerm_subnet" "this" {
   for_each = var.subnets
 
   # 🔴 FIX: enforce naming convention
-  name                 = "snet-${each.key}"
+  name = lookup(
+    var.subnet_name_overrides,
+    each.key,
+    "snet-${each.key}"
+  )
   resource_group_name  = var.resource_group
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = [each.value]
