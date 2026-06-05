@@ -66,6 +66,16 @@ module "private_dns" {
       name    = "hub-vnet-link"
       vnet_id = module.network.vnet_id
     }
+
+    uat = {
+      name    = "uat-vnet-link"
+      vnet_id = data.azurerm_virtual_network.uat.id
+    }
+
+    prod = {
+      name    = "prod-vnet-link"
+      vnet_id = data.azurerm_virtual_network.prod.id
+    }
   }
 }
 
