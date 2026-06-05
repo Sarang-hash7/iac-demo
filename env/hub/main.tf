@@ -1,3 +1,13 @@
+data "azurerm_virtual_network" "uat" {
+  name                = "vnet-uat"
+  resource_group_name = "rg-uat-01"
+}
+
+data "azurerm_virtual_network" "prod" {
+  name                = "vnet-prod"
+  resource_group_name = "rg-prod-01"
+}
+
 locals {
   env   = var.environment
   index = "01"
@@ -57,4 +67,28 @@ module "private_dns" {
       vnet_id = module.network.vnet_id
     }
   }
+}
+
+module "hub_to_uat_peering" {
+  source = "../../modules/vnet_peering"
+
+  vnet_a_name           = module.network.vnet_name
+  vnet_a_resource_group = module.resource_group.resource_group_name
+  vnet_a_id             = module.network.vnet_id
+
+  vnet_b_name           = data.azurerm_virtual_network.uat.name
+  vnet_b_resource_group = data.azurerm_virtual_network.uat.resource_group_name
+  vnet_b_id             = data.azurerm_virtual_network.uat.id
+}
+
+module "hub_to_prod_peering" {
+  source = "../../modules/vnet_peering"
+
+  vnet_a_name           = module.network.vnet_name
+  vnet_a_resource_group = module.resource_group.resource_group_name
+  vnet_a_id             = module.network.vnet_id
+
+  vnet_b_name           = data.azurerm_virtual_network.prod.name
+  vnet_b_resource_group = data.azurerm_virtual_network.prod.resource_group_name
+  vnet_b_id             = data.azurerm_virtual_network.prod.id
 }
