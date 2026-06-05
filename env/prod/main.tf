@@ -22,9 +22,9 @@ module "resource_group" {
   tags     = var.common_tags
 }
 
-# ========================
+# =======================
 # Network
-# ========================
+# =======================
 
 module "network" {
   source = "../../modules/network"
