@@ -8,6 +8,11 @@ data "azurerm_virtual_network" "prod" {
   resource_group_name = "rg-prod-01"
 }
 
+data "azurerm_virtual_network" "agent" {
+  name                = "iac-self-hosted-vnet"
+  resource_group_name = "iac-self-hosted_group"
+}
+
 locals {
   env   = var.environment
   index = "01"
@@ -67,14 +72,13 @@ module "private_dns" {
       vnet_id = module.network.vnet_id
     }
 
-    uat = {
-      name    = "uat-vnet-link"
-      vnet_id = data.azurerm_virtual_network.uat.id
-    }
-
     prod = {
       name    = "prod-vnet-link"
       vnet_id = data.azurerm_virtual_network.prod.id
+    }
+    agent = {
+      name    = "agent-vnet-link"
+      vnet_id = data.azurerm_virtual_network.agent.id
     }
   }
 }
@@ -101,4 +105,16 @@ module "hub_to_prod_peering" {
   vnet_b_name           = data.azurerm_virtual_network.prod.name
   vnet_b_resource_group = data.azurerm_virtual_network.prod.resource_group_name
   vnet_b_id             = data.azurerm_virtual_network.prod.id
+}
+
+module "hub_to_agent_peering" {
+  source = "../../modules/vnet_peering"
+
+  vnet_a_name           = module.network.vnet_name
+  vnet_a_resource_group = module.resource_group.resource_group_name
+  vnet_a_id             = module.network.vnet_id
+
+  vnet_b_name           = data.azurerm_virtual_network.agent.name
+  vnet_b_resource_group = data.azurerm_virtual_network.agent.resource_group_name
+  vnet_b_id             = data.azurerm_virtual_network.agent.id
 }
