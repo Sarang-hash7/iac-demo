@@ -21,6 +21,11 @@ data "azurerm_virtual_network" "agent_vnet" {
   resource_group_name = "iac-self-hosted_group"
 }
 
+data "azurerm_private_dns_zone" "hub_kv" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = "rg-hub-network-centralindia"
+}
+
 # ========================
 # Resource Group
 # ========================
