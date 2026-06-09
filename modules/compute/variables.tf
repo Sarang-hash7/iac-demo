@@ -15,6 +15,7 @@ variable "vm_config" {
     subnet          = string
     public_ip       = bool
     admin_username  = string
+    ip_forwarding   = optional(bool, false)
   }))
 }
 variable "subnet_map" { type = map(string) }
