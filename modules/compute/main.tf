@@ -24,11 +24,11 @@ resource "azurerm_public_ip" "this" {
 resource "azurerm_network_interface" "this" {
   for_each = var.vm_config
 
-  name                 = "nic-${var.environment}-${each.key}-${var.instance_index}"
-  location             = var.location
-  resource_group_name  = var.resource_group
+  name                  = "nic-${var.environment}-${each.key}-${var.instance_index}"
+  location              = var.location
+  resource_group_name   = var.resource_group
   ip_forwarding_enabled = each.value.ip_forwarding
-  tags                 = var.tags
+  tags                  = var.tags
 
   ip_configuration {
     name                          = "ipconfig1"
