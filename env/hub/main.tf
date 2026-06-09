@@ -13,6 +13,16 @@ data "azurerm_virtual_network" "agent" {
   resource_group_name = "iac-self-hosted_group"
 }
 
+data "azurerm_key_vault" "uat" {
+  name                = "kv-uat-56712"
+  resource_group_name = "rg-uat-01"
+}
+
+data "azurerm_key_vault_secret" "ssh_public_key" {
+  name         = "vm-ssh-public-key"
+  key_vault_id = data.azurerm_key_vault.uat.id
+}
+
 locals {
   env   = var.environment
   index = "01"
@@ -52,6 +62,27 @@ module "network" {
   private_endpoint_subnet = var.network_private_endpoint_subnet
 
   subnet_name_overrides = var.subnet_name_overrides
+
+  tags = var.common_tags
+}
+
+
+module "compute" {
+  source = "../../modules/compute"
+
+  environment    = var.environment
+  instance_index = "01"
+
+  resource_group = module.resource_group.resource_group_name
+  location       = var.location
+
+  vm_config = var.vm_config
+
+  subnet_map = module.network.subnet_ids
+
+  ssh_public_key = trimspace(
+    data.azurerm_key_vault_secret.ssh_public_key.value
+  )
 
   tags = var.common_tags
 }

@@ -35,6 +35,18 @@ variable "network_private_endpoint_subnet" {
   })
 }
 
+variable "vm_config" {
+  type = map(object({
+    vm_size         = string
+    os_disk_size_gb = number
+    os_disk_type    = string
+    subnet          = string
+    public_ip       = bool
+    admin_username  = string
+    ip_forwarding   = optional(bool, false)
+  }))
+}
+
 # ========================
 # Common Tags
 # ========================

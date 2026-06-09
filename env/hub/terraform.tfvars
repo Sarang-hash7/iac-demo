@@ -27,6 +27,18 @@ network_private_endpoint_subnet = {
   private_endpoint_network_policies = "Disabled"
 }
 
+vm_config = {
+  nva = {
+    vm_size         = "Standard_B2als_v2"
+    os_disk_size_gb = 30
+    os_disk_type    = "StandardSSD_LRS"
+    subnet          = "transit"
+    public_ip       = true
+    admin_username  = "azureuser"
+    ip_forwarding   = true
+  }
+}
+
 common_tags = {
   environment = "hub"
   project     = "webapp"
