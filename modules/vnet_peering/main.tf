@@ -5,6 +5,7 @@ resource "azurerm_virtual_network_peering" "a_to_b" {
   remote_virtual_network_id = var.vnet_b_id
 
   allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
 }
 
 resource "azurerm_virtual_network_peering" "b_to_a" {
@@ -14,4 +15,5 @@ resource "azurerm_virtual_network_peering" "b_to_a" {
   remote_virtual_network_id = var.vnet_a_id
 
   allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
 }
