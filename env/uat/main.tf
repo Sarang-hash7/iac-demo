@@ -99,6 +99,29 @@ module "key_vault_private_endpoint" {
   ]
 }
 
+module "spoke_routes" {
+  source = "../../modules/route_table"
+
+  name                = "rt-uat-spoke"
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  tags = var.common_tags
+
+  subnet_ids = {
+    app = module.network.subnet_ids["app"]
+    db  = module.network.subnet_ids["db"]
+  }
+
+  routes = {
+    prod = {
+      address_prefix = "10.20.0.0/16"
+      next_hop_type  = "VirtualAppliance"
+      next_hop_ip    = "10.0.5.4"
+    }
+  }
+}
+
 # ========================
 # Key Vault
 # ========================
