@@ -11,6 +11,20 @@ locals {
 }
 
 # ========================
+# UAT Key Vault
+# ========================
+
+data "azurerm_key_vault" "uat" {
+  name                = "kv-uat-56712"
+  resource_group_name = "rg-uat-01"
+}
+
+data "azurerm_key_vault_secret" "ssh_public_key" {
+  name         = "vm-ssh-public-key"
+  key_vault_id = data.azurerm_key_vault.uat.id
+}
+
+# ========================
 # Resource Group
 # ========================
 
@@ -62,4 +76,28 @@ module "spoke_routes" {
       next_hop_ip    = "10.0.5.4"
     }
   }
+}
+
+# ========================
+# Compute
+# ========================
+
+module "compute" {
+  source = "../../modules/compute"
+
+  environment    = var.environment
+  instance_index = local.index
+
+  resource_group = module.resource_group.resource_group_name
+  location       = var.location
+
+  vm_config = var.vm_config
+
+  subnet_map = {
+    app = module.network.subnet_ids["app"]
+  }
+
+  ssh_public_key = data.azurerm_key_vault_secret.ssh_public_key.value
+
+  tags = var.common_tags
 }

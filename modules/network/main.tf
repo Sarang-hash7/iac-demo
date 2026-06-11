@@ -30,14 +30,14 @@ resource "azurerm_subnet" "this" {
 
   dynamic "delegation" {
     for_each = lookup(var.subnet_delegations, each.key, null) != null ? [1] : []
+
     content {
       name = "delegation"
 
       service_delegation {
-        name = var.subnet_delegations[each.key]
-        actions = [
-          "Microsoft.Network/virtualNetworks/subnets/action"
-        ]
+        name = var.subnet_delegations[each.key].service_name
+
+        actions = var.subnet_delegations[each.key].actions
       }
     }
   }
