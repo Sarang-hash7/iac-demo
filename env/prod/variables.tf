@@ -24,6 +24,12 @@ variable "network_private_endpoint_subnet" {
   })
 }
 
+variable "subnet_delegations" {
+  type = map(string)
+
+  default = {}
+}
+
 variable "common_tags" {
   type = map(string)
 }

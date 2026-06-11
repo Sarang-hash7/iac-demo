@@ -36,6 +36,8 @@ module "network" {
   location                = var.location
   private_endpoint_subnet = var.network_private_endpoint_subnet
 
+  subnet_delegations = var.subnet_delegations
+
   tags = var.common_tags
 }
 

@@ -5,9 +5,14 @@ location = "centralindia"
 vnet_cidr = "10.20.0.0/16"
 
 subnets = {
-  app    = "10.20.1.0/24"
-  db     = "10.20.2.0/24"
-  future = "10.20.3.0/24"
+  app      = "10.20.1.0/24"
+  db       = "10.20.2.0/24"
+  future   = "10.20.3.0/24"
+  postgres = "10.20.5.0/24"
+}
+
+subnet_delegations = {
+  postgres = "Microsoft.DBforPostgreSQL/flexibleServers"
 }
 
 network_private_endpoint_subnet = {
