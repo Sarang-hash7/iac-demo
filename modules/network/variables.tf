@@ -34,12 +34,12 @@ variable "enable_service_endpoints" {
 }
 
 variable "subnet_delegations" {
-  type = map(string)
-  default = {
-    app    = null
-    db     = null
-    future = null
-  }
+  type = map(object({
+    service_name = string
+    actions      = list(string)
+  }))
+
+  default = {}
 }
 
 variable "private_endpoint_subnet" {

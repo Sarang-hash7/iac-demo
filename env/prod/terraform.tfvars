@@ -12,7 +12,13 @@ subnets = {
 }
 
 subnet_delegations = {
-  postgres = "Microsoft.DBforPostgreSQL/flexibleServers"
+  postgres = {
+    service_name = "Microsoft.DBforPostgreSQL/flexibleServers"
+
+    actions = [
+      "Microsoft.Network/virtualNetworks/subnets/join/action"
+    ]
+  }
 }
 
 network_private_endpoint_subnet = {
