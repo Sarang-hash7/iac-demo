@@ -33,6 +33,21 @@ variable "subnet_delegations" {
   default = {}
 }
 
+variable "app_nsg_rules" {
+  type = list(object({
+    name                    = string
+    priority                = number
+    direction               = string
+    access                  = string
+    protocol                = string
+    source_prefixes         = list(string)
+    destination_port_range  = optional(string)
+    destination_port_ranges = optional(list(string))
+  }))
+
+  default = []
+}
+
 variable "vm_config" {
   type = map(object({
     vm_size         = string

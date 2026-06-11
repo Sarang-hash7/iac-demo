@@ -78,6 +78,24 @@ module "spoke_routes" {
   }
 }
 
+module "security" {
+  source = "../../modules/security"
+
+  environment    = var.environment
+  resource_group = module.resource_group.resource_group_name
+  location       = var.location
+
+  subnet_map = {
+    app = module.network.subnet_ids["app"]
+  }
+
+  nsg_rules = {
+    app = var.app_nsg_rules
+  }
+
+  tags = var.common_tags
+}
+
 # ========================
 # Compute
 # ========================
