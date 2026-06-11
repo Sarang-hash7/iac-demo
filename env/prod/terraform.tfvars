@@ -27,6 +27,18 @@ network_private_endpoint_subnet = {
   private_endpoint_network_policies = "Disabled"
 }
 
+app_nsg_rules = [
+  {
+    name                   = "Allow-SSH-From-Local"
+    priority               = 100
+    direction              = "Inbound"
+    access                 = "Allow"
+    protocol               = "Tcp"
+    source_prefixes        = ["103.241.182.128/32"]
+    destination_port_range = "22"
+  }
+]
+
 common_tags = {
   environment = "prod"
   project     = "webapp"
