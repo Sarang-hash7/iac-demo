@@ -141,6 +141,25 @@ module "private_dns" {
   }
 }
 
+module "postgres_private_dns" {
+  source = "../../modules/private_dns"
+
+  dns_zone_name       = "privatelink.postgres.database.azure.com"
+  resource_group_name = module.resource_group.resource_group_name
+
+  vnet_links = {
+    hub = {
+      name    = "hub-postgres-link"
+      vnet_id = module.network.vnet_id
+    }
+
+    prod = {
+      name    = "prod-postgres-link"
+      vnet_id = data.azurerm_virtual_network.prod.id
+    }
+  }
+}
+
 module "hub_to_uat_peering" {
   source = "../../modules/vnet_peering"
 
