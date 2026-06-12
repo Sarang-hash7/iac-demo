@@ -70,6 +70,12 @@ variable "vm_config" {
   }
 }
 
+variable "kv_name" {
+  type        = string
+  description = "Override Key Vault name to avoid soft-delete conflicts"
+  default     = null
+}
+
 variable "common_tags" {
   type = map(string)
 }

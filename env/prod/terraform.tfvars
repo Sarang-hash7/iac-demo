@@ -44,3 +44,5 @@ common_tags = {
   project     = "webapp"
   owner       = "sarang.gupta@cloud4c.com"
 }
+
+kv_name = "kv-prod-56712"
