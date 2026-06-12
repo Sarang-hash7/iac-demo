@@ -7,7 +7,14 @@ locals {
   names = {
     rg   = "rg-${local.name_prefix}-${local.index}"
     vnet = "vnet-${local.name_prefix}"
+    kv   = var.kv_name != null ? var.kv_name : "kv-${local.name_prefix}-${local.index}"
+    law  = "log-${local.name_prefix}"
   }
+}
+
+data "azurerm_private_dns_zone" "hub_dns_zone" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = "rg-hub-network-centralindia"
 }
 
 # ========================
@@ -97,6 +104,53 @@ module "security" {
 }
 
 # ========================
+# Key Vault
+# ========================
+
+# ========================
+# Key Vault
+# ========================
+module "key_vault" {
+  source         = "../../modules/key_vault"
+  name           = local.names.kv
+  location       = var.location
+  resource_group = module.resource_group.resource_group_name
+
+  network_acls = {
+    default_action = "Deny"
+    bypass         = "None"
+
+    ip_rules = [
+      "103.241.182.128/32"
+    ]
+  }
+
+  log_analytics_workspace_id = module.monitoring.workspace_id
+  admin_object_id            = "5f4180f8-0b91-46d0-a76b-9dceef1de46f"
+  pipeline_sp_object_id      = "cd648a5e-4c69-4d62-97e5-279b108c88e6"
+
+  tags = var.common_tags
+}
+
+module "key_vault_private_endpoint" {
+  source = "../../modules/private_endpoint"
+
+  name                = "pe-kv-prod"
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  subnet_id = module.network.private_endpoint_subnet_id
+
+  private_connection_resource_id = module.key_vault.key_vault_id
+
+  subresource_names = ["vault"]
+
+  private_dns_zone_ids = [
+    data.azurerm_private_dns_zone.hub_dns_zone.id
+  ]
+}
+
+# ========================
 # Compute
 # ========================
 
@@ -118,4 +172,22 @@ module "compute" {
   ssh_public_key = data.azurerm_key_vault_secret.ssh_public_key.value
 
   tags = var.common_tags
+}
+
+# ========================
+# Monitoring
+# ========================
+
+module "monitoring" {
+  source = "../../modules/monitoring"
+
+  workspace_name = local.names.law
+  location       = var.location
+  resource_group = module.resource_group.resource_group_name
+
+  retention_in_days = 30
+  daily_quota_gb    = 0.4
+
+  vm_resource_ids = module.compute.vm_ids
+  tags            = var.common_tags
 }

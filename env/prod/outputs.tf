@@ -13,3 +13,7 @@ output "prod_vnet_name" {
 output "prod_private_endpoint_subnet_id" {
   value = module.network.private_endpoint_subnet_id
 }
+
+output "log_analytics_workspace_id" {
+  value = try(module.monitoring.workspace_id, "")
+}
