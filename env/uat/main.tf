@@ -94,6 +94,24 @@ module "key_vault_private_endpoint" {
   ]
 }
 
+module "key_vault_private_endpoint_hub" {
+  source = "../../modules/private_endpoint"
+
+  name                = "pe-kv-uat-hub"
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  subnet_id = module.network.private_endpoint_subnet_id
+
+  private_connection_resource_id = module.key_vault.key_vault_id
+
+  subresource_names = ["vault"]
+
+  private_dns_zone_ids = [
+    data.azurerm_private_dns_zone.hub_kv.id
+  ]
+}
+
 module "spoke_routes" {
   source = "../../modules/route_table"
 
