@@ -138,6 +138,10 @@ module "private_dns" {
       name    = "prod-vnet-link"
       vnet_id = data.azurerm_virtual_network.prod.id
     }
+    agent = {
+      name    = "agent-vnet-link"
+      vnet_id = data.azurerm_virtual_network.agent.id
+    }
   }
 }
 
