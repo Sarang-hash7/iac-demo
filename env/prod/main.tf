@@ -17,9 +17,9 @@ data "azurerm_private_dns_zone" "hub_dns_zone" {
   resource_group_name = "rg-hub-network-centralindia"
 }
 
-# ========================
+# =========================
 # UAT Key Vault
-# ========================
+# =========================
 
 data "azurerm_key_vault" "uat" {
   name                = "kv-uat-56712"
