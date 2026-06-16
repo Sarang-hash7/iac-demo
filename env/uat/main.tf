@@ -62,42 +62,6 @@ module "vnet_peering" {
   vnet_b_id             = data.azurerm_virtual_network.agent_vnet.id
 }
 
-module "private_dns" {
-  source = "../../modules/private_dns"
-
-  dns_zone_name       = "privatelink.vaultcore.azure.net"
-  resource_group_name = module.resource_group.resource_group_name
-
-  vnet_links = {
-    uat = {
-      name    = "uat-vnet-link"
-      vnet_id = module.network.vnet_id
-    }
-    agent = {
-      name    = "agent-vnet-link"
-      vnet_id = data.azurerm_virtual_network.agent_vnet.id
-    }
-  }
-}
-
-module "key_vault_private_endpoint" {
-  source = "../../modules/private_endpoint"
-
-  name                = "pe-kv-uat"
-  location            = var.location
-  resource_group_name = module.resource_group.resource_group_name
-
-  subnet_id = module.network.private_endpoint_subnet_id
-
-  private_connection_resource_id = module.key_vault.key_vault_id
-
-  subresource_names = ["vault"]
-
-  private_dns_zone_ids = [
-    module.private_dns.dns_zone_id
-  ]
-}
-
 module "key_vault_private_endpoint_hub" {
   source = "../../modules/private_endpoint"
 
