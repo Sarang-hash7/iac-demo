@@ -73,6 +73,10 @@ module "private_dns" {
       name    = "uat-vnet-link"
       vnet_id = module.network.vnet_id
     }
+    agent = {
+      name    = "agent-vnet-link"
+      vnet_id = data.azurerm_virtual_network.agent.id
+    }
   }
 }
 
@@ -91,6 +95,24 @@ module "key_vault_private_endpoint" {
 
   private_dns_zone_ids = [
     module.private_dns.dns_zone_id
+  ]
+}
+
+module "key_vault_private_endpoint_hub" {
+  source = "../../modules/private_endpoint"
+
+  name                = "pe-kv-uat-hub"
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  subnet_id = module.network.private_endpoint_subnet_id
+
+  private_connection_resource_id = module.key_vault.key_vault_id
+
+  subresource_names = ["vault"]
+
+  private_dns_zone_ids = [
+    data.azurerm_private_dns_zone.hub_kv.id
   ]
 }
 
