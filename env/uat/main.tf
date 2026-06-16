@@ -100,6 +100,11 @@ module "spoke_routes" {
       next_hop_type  = "VirtualAppliance"
       next_hop_ip    = "10.0.5.4"
     }
+    agent = {
+      address_prefix = "10.2.0.0/16"
+      next_hop_type  = "VirtualAppliance"
+      next_hop_ip    = "10.0.5.4"
+    }
   }
 }
 
