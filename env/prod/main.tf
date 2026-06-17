@@ -17,6 +17,21 @@ data "azurerm_private_dns_zone" "hub_dns_zone" {
   resource_group_name = "rg-hub-network-centralindia"
 }
 
+data "azurerm_private_dns_zone" "postgres" {
+  name                = "privatelink.postgres.database.azure.com"
+  resource_group_name = "rg-hub-network-centralindia"
+}
+
+data "azurerm_key_vault" "prod" {
+  name                = "kv-prod-56712"
+  resource_group_name = "rg-prod-01"
+}
+
+data "azurerm_key_vault_secret" "postgres_password" {
+  name         = "postgres-admin-password"
+  key_vault_id = data.azurerm_key_vault.prod.id
+}
+
 # =========================
 # UAT Key Vault
 # =========================
@@ -177,6 +192,45 @@ module "compute" {
   ssh_public_key = data.azurerm_key_vault_secret.ssh_public_key.value
 
   tags = var.common_tags
+}
+
+resource "azurerm_postgresql_flexible_server" "prod" {
+  name                = "psql-prod-01"
+  resource_group_name = module.resource_group.resource_group_name
+  location            = var.location
+
+  version                       = "16"
+  public_network_access_enabled = false
+
+  delegated_subnet_id = module.network.subnet_ids["postgres"]
+
+  private_dns_zone_id = data.azurerm_private_dns_zone.postgres.id
+
+  administrator_login    = "pgadmin"
+  administrator_password = data.azurerm_key_vault_secret.postgres_password.value
+
+  storage_mb = 32768
+
+  sku_name = "B_Standard_B1ms"
+
+  backup_retention_days = 7
+
+  geo_redundant_backup_enabled = false
+
+  zone = "1"
+
+  tags = var.common_tags
+
+  depends_on = [
+    module.network
+  ]
+}
+
+resource "azurerm_postgresql_flexible_server_database" "appdb" {
+  name      = "appdb"
+  server_id = azurerm_postgresql_flexible_server.prod.id
+  charset   = "UTF8"
+  collation = "en_US.utf8"
 }
 
 # ========================
