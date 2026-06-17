@@ -36,6 +36,16 @@ app_nsg_rules = [
     protocol               = "Tcp"
     source_prefixes        = ["103.241.182.128/32"]
     destination_port_range = "22"
+  },
+
+  {
+    name                   = "Allow-Flask-From-Local"
+    priority               = 110
+    direction              = "Inbound"
+    access                 = "Allow"
+    protocol               = "Tcp"
+    source_prefixes        = ["103.241.182.128/32"]
+    destination_port_range = "5000"
   }
 ]
 
