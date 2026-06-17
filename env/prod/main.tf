@@ -195,7 +195,7 @@ module "compute" {
 }
 
 resource "azurerm_postgresql_flexible_server" "prod" {
-  name                = "psql-prod-01"
+  name                = "psql-prod-56712"
   resource_group_name = module.resource_group.resource_group_name
   location            = var.location
 
