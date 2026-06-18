@@ -98,6 +98,44 @@ resource "azurerm_subnet_network_security_group_association" "transit" {
   network_security_group_id = azurerm_network_security_group.nva.id
 }
 
+module "hub_firewall_policy" {
+  source = "../../modules/firewall-policy"
+
+  firewall_policy_name = "fwpol-hub-prod"
+
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  firewall_policy_sku = "Basic"
+
+  dns_proxy_enabled = false
+
+  tags = var.common_tags
+}
+
+module "hub_firewall" {
+  source = "../../modules/firewall"
+
+  firewall_name = "afw-hub-prod"
+
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  firewall_sku_name = "AZFW_VNet"
+  firewall_sku_tier = "Basic"
+
+  firewall_policy_id = module.hub_firewall_policy.firewall_policy_id
+
+  firewall_subnet_id = module.network.subnet_ids["firewall"]
+
+  tags = var.common_tags
+
+  depends_on = [
+    module.network,
+    module.hub_firewall_policy
+  ]
+}
+
 module "compute" {
   source = "../../modules/compute"
 
