@@ -22,3 +22,13 @@ output "firewall_public_ip_id" {
   description = "Firewall Public IP Resource ID"
   value       = azurerm_public_ip.this.id
 }
+
+output "firewall_management_public_ip" {
+  description = "Firewall Management Public IP Address"
+  value       = azurerm_public_ip.management.ip_address
+}
+
+output "firewall_management_public_ip_id" {
+  description = "Firewall Management Public IP Resource ID"
+  value       = azurerm_public_ip.management.id
+}

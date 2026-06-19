@@ -35,6 +35,11 @@ variable "firewall_subnet_id" {
   type        = string
 }
 
+variable "firewall_management_subnet_id" {
+  description = "AzureFirewallManagementSubnet ID"
+  type        = string
+}
+
 variable "public_ip_sku" {
   description = "Public IP SKU"
   type        = string

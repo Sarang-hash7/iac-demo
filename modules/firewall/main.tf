@@ -15,6 +15,19 @@ resource "azurerm_public_ip" "this" {
   tags = var.tags
 }
 
+resource "azurerm_public_ip" "management" {
+
+  name                = "${var.firewall_name}-management-pip"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  allocation_method = "Static"
+
+  sku = var.public_ip_sku
+
+  tags = var.tags
+}
+
 ##########################################
 # Azure Firewall
 ##########################################
@@ -38,6 +51,16 @@ resource "azurerm_firewall" "this" {
 
     public_ip_address_id = azurerm_public_ip.this.id
   }
+
+  management_ip_configuration {
+
+    name = "management"
+
+    subnet_id = var.firewall_management_subnet_id
+
+    public_ip_address_id = azurerm_public_ip.management.id
+  }
+
 
   tags = var.tags
 }

@@ -126,7 +126,8 @@ module "hub_firewall" {
 
   firewall_policy_id = module.hub_firewall_policy.firewall_policy_id
 
-  firewall_subnet_id = module.network.subnet_ids["firewall"]
+  firewall_subnet_id            = module.network.subnet_ids["firewall"]
+  firewall_management_subnet_id = module.network.subnet_ids["firewallmanagement"]
 
   tags = var.common_tags
 
