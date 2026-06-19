@@ -19,10 +19,9 @@ variable "firewall_policy_sku" {
   default     = "Basic"
 }
 
-variable "dns_proxy_enabled" {
-  description = "Enable DNS Proxy"
-  type        = bool
-  default     = false
+variable "enable_dns_proxy" {
+  type    = bool
+  default = false
 }
 
 variable "tags" {

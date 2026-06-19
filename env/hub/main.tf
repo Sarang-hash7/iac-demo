@@ -108,7 +108,7 @@ module "hub_firewall_policy" {
 
   firewall_policy_sku = "Basic"
 
-  dns_proxy_enabled = false
+  enable_dns_proxy = false
 
   tags = var.common_tags
 }
