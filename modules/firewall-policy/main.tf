@@ -6,8 +6,12 @@ resource "azurerm_firewall_policy" "this" {
 
   sku = var.firewall_policy_sku
 
-  dns {
-    proxy_enabled = var.dns_proxy_enabled
+  dynamic "dns" {
+    for_each = var.enable_dns_proxy ? [1] : []
+
+    content {
+      proxy_enabled = true
+    }
   }
 
   tags = var.tags
