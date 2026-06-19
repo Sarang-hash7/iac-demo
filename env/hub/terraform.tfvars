@@ -9,16 +9,18 @@ subnets = {
   bastion        = "10.0.2.0/24"
   sharedservices = "10.0.3.0/24"
 
-  transit  = "10.0.5.0/24"
-  firewall = "10.0.6.0/24"
+  transit            = "10.0.5.0/24"
+  firewall           = "10.0.6.0/24"
+  firewallmanagement = "10.0.7.0/24"
 }
 
 subnet_name_overrides = {
   gateway = "GatewaySubnet"
   bastion = "AzureBastionSubnet"
 
-  transit  = "TransitSubnet"
-  firewall = "AzureFirewallSubnet"
+  transit            = "TransitSubnet"
+  firewall           = "AzureFirewallSubnet"
+  firewallmanagement = "AzureFirewallManagementSubnet"
 }
 
 network_private_endpoint_subnet = {
