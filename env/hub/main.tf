@@ -223,7 +223,97 @@ module "hub_firewall_policy_rcg" {
 
   application_rule_collections = []
 
-  nat_rule_collections = []
+  nat_rule_collections = [
+
+    {
+      name     = "inbound-dnat"
+      priority = 100
+      action   = "Dnat"
+
+      rules = [
+
+        ##################################################
+        # UAT SSH
+        ##################################################
+
+        {
+          name = "uat-ssh"
+
+          protocols = ["TCP"]
+
+          source_addresses = ["103.241.182.128/32"]
+
+          destination_address = module.hub_firewall.firewall_public_ip
+
+          destination_ports = ["22"]
+
+          translated_address = var.uat_app_vm_private_ip
+
+          translated_port = "22"
+        },
+
+        ##################################################
+        # PROD SSH
+        ##################################################
+
+        {
+          name = "prod-ssh"
+
+          protocols = ["TCP"]
+
+          source_addresses = ["103.241.182.128/32"]
+
+          destination_address = module.hub_firewall.firewall_public_ip
+
+          destination_ports = ["2222"]
+
+          translated_address = var.prod_app_vm_private_ip
+
+          translated_port = "22"
+        },
+
+        ##################################################
+        # UAT Flask
+        ##################################################
+
+        {
+          name = "uat-flask"
+
+          protocols = ["TCP"]
+
+          source_addresses = ["*"]
+
+          destination_address = module.hub_firewall.firewall_public_ip
+
+          destination_ports = ["5000"]
+
+          translated_address = var.uat_app_vm_private_ip
+
+          translated_port = "5000"
+        },
+
+        ##################################################
+        # PROD Flask
+        ##################################################
+
+        {
+          name = "prod-flask"
+
+          protocols = ["TCP"]
+
+          source_addresses = ["*"]
+
+          destination_address = module.hub_firewall.firewall_public_ip
+
+          destination_ports = ["5001"]
+
+          translated_address = var.prod_app_vm_private_ip
+
+          translated_port = "5000"
+        }
+      ]
+    }
+  ]
 
 }
 
