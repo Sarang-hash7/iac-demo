@@ -227,7 +227,7 @@ module "hub_firewall_policy_rcg" {
 
     {
       name     = "inbound-dnat"
-      priority = 100
+      priority = 200
       action   = "Dnat"
 
       rules = [
