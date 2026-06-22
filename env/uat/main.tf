@@ -105,6 +105,11 @@ module "spoke_routes" {
       next_hop_type  = "VirtualAppliance"
       next_hop_ip    = "10.0.5.4"
     }
+    default-internet = {
+      address_prefix = "0.0.0.0/0"
+      next_hop_type  = "VirtualAppliance"
+      next_hop_ip    = "10.0.6.4"
+    }
   }
 }
 
