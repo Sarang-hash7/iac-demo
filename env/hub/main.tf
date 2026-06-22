@@ -113,6 +113,120 @@ module "hub_firewall_policy" {
   tags = var.common_tags
 }
 
+##########################################
+# Firewall Policy Rule Collection Group
+##########################################
+
+module "hub_firewall_policy_rcg" {
+
+  source = "../../modules/firewall-policy-rule-collection-group"
+
+  firewall_policy_id = module.hub_firewall_policy.firewall_policy_id
+
+  rule_collection_group_name = "rcg-hub-default"
+
+  priority = 100
+
+  ##################################################
+  # Network Rule Collections
+  ##################################################
+
+  network_rule_collections = [
+
+    {
+      name     = "allow-infrastructure"
+      priority = 100
+      action   = "Allow"
+
+      rules = [
+
+        ##################################################
+        # DNS
+        ##################################################
+
+        {
+          name = "allow-dns"
+
+          protocols = [
+            "TCP",
+            "UDP"
+          ]
+
+          source_addresses = [
+            "10.10.0.0/16",
+            "10.20.0.0/16"
+          ]
+
+          destination_addresses = [
+            "*"
+          ]
+
+          destination_ports = [
+            "53"
+          ]
+        },
+
+        ##################################################
+        # HTTP
+        ##################################################
+
+        {
+          name = "allow-http"
+
+          protocols = [
+            "TCP"
+          ]
+
+          source_addresses = [
+            "10.10.0.0/16",
+            "10.20.0.0/16"
+          ]
+
+          destination_addresses = [
+            "*"
+          ]
+
+          destination_ports = [
+            "80"
+          ]
+        },
+
+        ##################################################
+        # HTTPS
+        ##################################################
+
+        {
+          name = "allow-https"
+
+          protocols = [
+            "TCP"
+          ]
+
+          source_addresses = [
+            "10.10.0.0/16",
+            "10.20.0.0/16"
+          ]
+
+          destination_addresses = [
+            "*"
+          ]
+
+          destination_ports = [
+            "443"
+          ]
+        }
+
+      ]
+    }
+
+  ]
+
+  application_rule_collections = []
+
+  nat_rule_collections = []
+
+}
+
 module "hub_firewall" {
   source = "../../modules/firewall"
 
