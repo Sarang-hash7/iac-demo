@@ -69,3 +69,17 @@ variable "vm_config" {
 variable "common_tags" {
   type = map(string)
 }
+
+##################################################
+# Backend VM Private IPs
+##################################################
+
+variable "uat_app_vm_private_ip" {
+  description = "Private IP of the UAT App VM"
+  type        = string
+}
+
+variable "prod_app_vm_private_ip" {
+  description = "Private IP of the PROD App VM"
+  type        = string
+}

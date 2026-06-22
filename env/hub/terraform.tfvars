@@ -55,6 +55,14 @@ nva_nsg_rules = [
   }
 ]
 
+##################################################
+# Backend VM Private IPs
+##################################################
+
+uat_app_vm_private_ip = "10.10.1.4"
+
+prod_app_vm_private_ip = "10.20.1.4"
+
 common_tags = {
   environment = "hub"
   project     = "webapp"
