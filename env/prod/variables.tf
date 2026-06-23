@@ -64,7 +64,7 @@ variable "vm_config" {
       os_disk_size_gb = 30
       os_disk_type    = "StandardSSD_LRS"
       subnet          = "app"
-      public_ip       = false
+      public_ip       = true
       admin_username  = "azureuser"
     }
   }
