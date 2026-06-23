@@ -36,6 +36,9 @@ resource "azurerm_network_interface" "this" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = lookup(azurerm_public_ip.this, each.key, null) != null ? azurerm_public_ip.this[each.key].id : null
   }
+
+  # ✅ NIC must be updated (detached) before PIP can be destroyed
+  depends_on = [azurerm_public_ip.this]
 }
 
 # ========================
