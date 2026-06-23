@@ -8,7 +8,7 @@ vm_config = {
     os_disk_size_gb = 30
     os_disk_type    = "StandardSSD_LRS"
     subnet          = "app"
-    public_ip       = true
+    public_ip       = false
     admin_username  = "azureuser"
   }
 

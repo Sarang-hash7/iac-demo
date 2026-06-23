@@ -215,7 +215,6 @@ module "hub_firewall_policy_rcg" {
             "443"
           ]
         }
-
       ]
     }
 
