@@ -1,0 +1,171 @@
+locals {
+  env   = var.environment
+  index = "01"
+
+  name_prefix = local.env
+
+  names = {
+    rg   = "rg-${local.name_prefix}-${local.index}"
+    vnet = "vnet-${local.name_prefix}"
+    kv   = var.kv_name != null ? var.kv_name : "kv-${local.name_prefix}-${local.index}"
+    law  = "log-${local.name_prefix}"
+  }
+}
+
+data "azurerm_private_dns_zone" "hub_dns_zone" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = "rg-hub-network-centralindia"
+}
+
+data "azurerm_private_dns_zone" "postgres" {
+  name                = "privatelink.postgres.database.azure.com"
+  resource_group_name = "rg-hub-network-centralindia"
+}
+
+# ========================
+# Resource Group
+# ========================
+
+module "resource_group" {
+  source = "../../modules/resource_group"
+
+  name     = local.names.rg
+  location = var.location
+  tags     = var.common_tags
+}
+
+# =======================
+# Network
+# =======================
+
+module "network" {
+  source = "../../modules/network"
+
+  vnet_name               = local.names.vnet
+  address_space           = var.vnet_cidr
+  subnets                 = var.subnets
+  resource_group          = module.resource_group.resource_group_name
+  location                = var.location
+  private_endpoint_subnet = var.network_private_endpoint_subnet
+
+  subnet_delegations = var.subnet_delegations
+
+  tags = var.common_tags
+}
+
+module "spoke_routes" {
+  source = "../../modules/route_table"
+
+  name                = "rt-prod-dr-spoke"
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  tags = var.common_tags
+
+  subnet_ids = {
+    app = module.network.subnet_ids["app"]
+  }
+
+  routes = {
+    uat = {
+      address_prefix = "10.10.0.0/16"
+      next_hop_type  = "VirtualAppliance"
+      next_hop_ip    = "10.0.5.4"
+    }
+
+    prod = {
+      address_prefix = "10.20.0.0/16"
+      next_hop_type  = "VirtualAppliance"
+      next_hop_ip    = "10.0.5.4"
+    }
+
+    agent = {
+      address_prefix = "10.2.0.0/16"
+      next_hop_type  = "VirtualAppliance"
+      next_hop_ip    = "10.0.5.4"
+    }
+
+    default-internet = {
+      address_prefix = "0.0.0.0/0"
+      next_hop_type  = "VirtualAppliance"
+      next_hop_ip    = "10.0.6.4"
+    }
+  }
+}
+
+module "security" {
+  source = "../../modules/security"
+
+  environment    = var.environment
+  resource_group = module.resource_group.resource_group_name
+  location       = var.location
+
+  subnet_map = {
+    app = module.network.subnet_ids["app"]
+  }
+
+  nsg_rules = {
+    app = var.app_nsg_rules
+  }
+
+  tags = var.common_tags
+}
+
+# ========================
+# Key Vault
+# ========================
+module "key_vault" {
+  source         = "../../modules/key_vault"
+  name           = local.names.kv
+  location       = var.location
+  resource_group = module.resource_group.resource_group_name
+
+  network_acls = {
+    default_action = "Deny"
+    bypass         = "None"
+
+    ip_rules = [
+      "103.241.182.128/32"
+    ]
+  }
+
+  log_analytics_workspace_id = module.monitoring.workspace_id
+  admin_object_id            = "5f4180f8-0b91-46d0-a76b-9dceef1de46f"
+  pipeline_sp_object_id      = "cd648a5e-4c69-4d62-97e5-279b108c88e6"
+
+  tags = var.common_tags
+}
+
+module "key_vault_private_endpoint" {
+  source = "../../modules/private_endpoint"
+
+  name                = "pe-kv-prod-dr"
+  location            = var.location
+  resource_group_name = module.resource_group.resource_group_name
+
+  subnet_id = module.network.private_endpoint_subnet_id
+
+  private_connection_resource_id = module.key_vault.key_vault_id
+
+  subresource_names = ["vault"]
+
+  private_dns_zone_ids = [
+    data.azurerm_private_dns_zone.hub_dns_zone.id
+  ]
+}
+
+# ========================
+# Monitoring
+# ========================
+
+module "monitoring" {
+  source = "../../modules/monitoring"
+
+  workspace_name = local.names.law
+  location       = var.location
+  resource_group = module.resource_group.resource_group_name
+
+  retention_in_days = 30
+  daily_quota_gb    = 0.4
+  tags              = var.common_tags
+}

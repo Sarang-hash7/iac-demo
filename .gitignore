@@ -10,6 +10,7 @@ override.tf.json
 !env/uat/terraform.tfvars
 !env/hub/terraform.tfvars
 !env/prod/terraform.tfvars
+!env/prod-dr/terraform.tfvars
 
 # Editors
 .vscode/
