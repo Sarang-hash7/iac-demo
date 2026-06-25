@@ -154,6 +154,24 @@ module "key_vault_private_endpoint" {
   ]
 }
 
+module "disaster_recovery" {
+  source = "../../modules/disaster_recovery"
+
+  vault_name              = "rsv-prod-dr-01"
+  replication_policy_name = "asr-policy-prod-dr"
+
+  cache_storage_account_name = "stasrprod01"
+
+  dr_location = var.location
+
+  primary_location       = "centralindia"
+  primary_resource_group = "rg-prod-01"
+
+  dr_resource_group = module.resource_group.resource_group_name
+
+  tags = var.common_tags
+}
+
 # ========================
 # Monitoring
 # ========================
