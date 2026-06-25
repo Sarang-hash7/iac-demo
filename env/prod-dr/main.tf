@@ -111,9 +111,9 @@ module "security" {
   tags = var.common_tags
 }
 
-# ========================
+# =========================
 # Key Vault
-# ========================
+# =========================
 module "key_vault" {
   source         = "../../modules/key_vault"
   name           = local.names.kv
